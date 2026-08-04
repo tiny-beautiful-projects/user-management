@@ -5,8 +5,11 @@ import hello.hello_spring.domain.Member;
 import hello.hello_spring.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 @Controller
 public class MemberController {
@@ -38,10 +41,13 @@ public class MemberController {
         // 이전 단계에서 @Autowired로 전달받은 MemberService의 가입 메서드를 호출하여 회원 정보를 저장
         memberService.join(member);
         return "redirect:/";
-
     }
 
-
-
+    @GetMapping(value = "/members")
+    public String list(Model model) {
+        List<Member> members = memberService.findMembers();
+        model.addAttribute("members", members);
+        return "members/memberList";
+    }
 
 }
